@@ -12,6 +12,8 @@ export class SyncRecord implements SyncRecordDto {
   timestamp: number;
   @Prop({ required: true })
   syncStatus: string;
+  @Prop([String])
+  targets: string[];
 }
 
 export const SyncRecordSchema = SchemaFactory.createForClass(SyncRecord);

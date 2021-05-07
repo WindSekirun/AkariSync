@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { SyncData } from "./schema/syncdata.schema";
 
@@ -19,5 +19,10 @@ export class AppController {
   @Put("syncdata/create")
   async createSyncData(@Body() syncData: SyncData): Promise<SyncData> {
     return this.appService.createSyncData(syncData);
+  }
+
+  @Post("syncdata/sync/:id")
+  async requestSync(@Param() id: string) {
+    return this.appService.requestSync(id);
   }
 }

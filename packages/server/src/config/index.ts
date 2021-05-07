@@ -18,6 +18,7 @@ export interface Config {
   globalPrefix: string;
   cors: CorsOptions;
   mongoUrl: string;
+  redisUrl: string;
 }
 
 export const configFactory = (): Config => {
@@ -32,6 +33,7 @@ export const configFactory = (): Config => {
           )
         : false
     },
-    mongoUrl: process.env.MONGO_URL
+    mongoUrl: process.env.MONGO_URL,
+    redisUrl: process.env.REDIS_URL
   };
 };
