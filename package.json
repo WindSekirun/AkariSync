@@ -1,0 +1,34 @@
+{
+  "name": "akari-sync",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "libs/*"
+    ],
+    "nohoist": [
+      "**/@vue/cli-service"
+    ]
+  },
+  "scripts": {
+    "api": "yarn workspace @akari-sync/api",
+    "web": "yarn workspace @akari-sync/web",
+    "build": "concurrently -n \"api\" \"yarn api build\"",
+    "start": "concurrently -k \"yarn api start:dev\"",
+    "bootstrap": "lerna bootstrap",
+    "format": "yarn lint --fix && prettier --write **/*.{html,scss,json}",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.vue"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "~2.23.0",
+    "@typescript-eslint/parser": "~2.23.0",
+    "concurrently": "~5.1.0",
+    "eslint": "~6.8.0",
+    "eslint-config-prettier": "~6.10.1",
+    "eslint-plugin-prettier": "~3.1.2",
+    "lerna": "~4.0.0",
+    "lint-staged": "~10.0.8",
+    "prettier": "~2.0.1",
+    "yorkie": "~2.0.0"
+  }
+}

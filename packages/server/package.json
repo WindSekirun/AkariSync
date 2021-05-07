@@ -1,0 +1,49 @@
+{
+  "name": "@akari-sync/api",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "prebuild": "rimraf ../../dist/api",
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node ../../dist/api/main",
+    "test": "jest",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+  },
+  "dependencies": {
+    "@akari-sync/dto": "^0.0.1",
+    "@hapi/joi": "^17.1.0",
+    "@nestjs/bull": "^0.3.1",
+    "@nestjs/common": "^6.11.7",
+    "@nestjs/config": "^0.2.2",
+    "@nestjs/core": "^6.11.7",
+    "@nestjs/mongoose": "^7.0.2",
+    "@nestjs/platform-express": "^6.11.7",
+    "bull": "^3.22.4",
+    "mongoose": "^5.10.11",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.4"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^6.14.2",
+    "@nestjs/schematics": "^6.9.3",
+    "@nestjs/testing": "^6.11.7",
+    "@shelf/jest-mongodb": "~1.2.3",
+    "@types/bull": "^3.15.1",
+    "@types/express": "^4.17.2",
+    "@types/hapi__joi": "^16.0.9",
+    "@types/jest": "^24.0.18",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^12.7.5",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.2",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "~3.7.5"
+  }
+}

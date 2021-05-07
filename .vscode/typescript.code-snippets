@@ -1,0 +1,35 @@
+{
+  "Advanced Enum": {
+    "scope": "typescript",
+    "prefix": "enum",
+    "body": [
+      "class $1 {",
+      "  static readonly INSTANCE = new $1(\"INSTANCE\", \"INSTANCE\");",
+      "  static readonly INSTANCE2 = new $1(\"INSTANCE2\", \"INSTANCE2\");",
+      "  static get values(): $1[] {",
+      "    return [this.INSTANCE, this.INSTANCE2];",
+      "  }",
+      "  static fromString(string: string): $1 {",
+      "    const value = (this as any)[string];",
+      "    if (value) {",
+      "      return value;",
+      "    }",
+      "    throw new RangeError(",
+      "      `Illegal argument passed to fromString(): ${string} does not correspond to any instance of the enum ${",
+      "        (this as any).prototype.constructor.name",
+      "      }`",
+      "    );",
+      "  }",
+      "  private constructor(",
+      "    public readonly name: string,",
+      "    public readonly desc: string",
+      "  ) {}",
+      "  public toJSON() {",
+      "    return this.name;",
+      "  }",
+      "}",
+      "export default $1;"
+    ],
+    "description": "Advanced enum"
+  }
+}

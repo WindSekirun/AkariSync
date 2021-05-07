@@ -5,4 +5,5 @@
 ## Usages
 
 ## License
-MIT License.
+
+MIT License

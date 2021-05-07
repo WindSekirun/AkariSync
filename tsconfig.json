@@ -1,0 +1,15 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "target": "esnext",
+    "module": "esnext",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false
+  },
+  "exclude": ["node_modules", "dist"]
+}
