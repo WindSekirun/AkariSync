@@ -1,11 +1,11 @@
 import fs from "fs";
 
-export function makeFolder(id: string) {
-  if (!fs.existsSync(`./videos/`)) {
-    fs.mkdirSync(`videos/`);
+export function makeFolder(tempPath: string, id: string) {
+  if (!fs.existsSync(`${tempPath}/videos/`)) {
+    fs.mkdirSync(`${tempPath}/videos/`);
   }
 
-  if (!fs.existsSync(`./videos/${id}`)) {
-    fs.mkdirSync(`videos/${id}`);
+  if (!fs.existsSync(`${tempPath}/videos/${id}`)) {
+    fs.mkdirSync(`${tempPath}/videos/${id}`);
   }
 }

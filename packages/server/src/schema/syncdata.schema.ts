@@ -9,7 +9,7 @@ export class SyncData implements SyncDataDto {
   @Prop({ required: true })
   name: string;
   @Prop({ required: true })
-  remote: string;
+  targetId: string;
   @Prop({ required: true })
   platform: string;
   @Prop({ required: true })

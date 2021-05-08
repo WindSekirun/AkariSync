@@ -26,7 +26,8 @@
     "mongoose": "^5.10.11",
     "reflect-metadata": "^0.1.13",
     "rss-parser": "^3.12.0",
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.5.4",
+    "webdav": "^4.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.14.2",

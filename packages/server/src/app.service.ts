@@ -32,6 +32,17 @@ export class AppService {
     return this.syncDataModel.create(syncData);
   }
 
+  async removeSyncData(id: string) {
+    return this.syncDataModel.findByIdAndRemove(id);
+  }
+
+  async updateSyncData(id: string, syncData: SyncData) {
+    return this.syncDataModel.findByIdAndUpdate(id, syncData, {
+      upsert: true,
+      useFindAndModify: true
+    });
+  }
+
   async requestSync(id: string) {
     const _id = Types.ObjectId.createFromHexString(id);
     const syncData = await this.syncDataModel.findById(_id);

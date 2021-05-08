@@ -9,9 +9,16 @@ import { Job } from "bull";
 import { NicoNicoMyListPlatform } from "./platform/niconico.mylist.platform";
 import { Platform } from "./platform/platform";
 import { SyncData } from "./schema/syncdata.schema";
+import { WebDavClient } from "./webdav/webdavclient";
 
 @Processor("syncQueue")
 export class SyncQueueConsumer {
+  webDavClient: WebDavClient;
+
+  constructor() {
+    this.webDavClient = new WebDavClient();
+  }
+
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
@@ -31,13 +38,16 @@ export class SyncQueueConsumer {
 
     // platform matching
     let platform: Platform;
-    if (syncData.platform == "niconico_mylist") {
+    if (syncData.platform == NicoNicoMyListPlatform.platformType) {
       platform = new NicoNicoMyListPlatform();
     }
 
-    const list = await platform.getList(syncData);
-    console.log(list);
+    const videoList = await platform.getList(syncData.targetId);
+    const syncedList = this.webDavClient.getDirectoryContents(
+      syncData.syncDirectory
+    );
+    console.log(syncedList);
 
-    job.moveToCompleted(list);
+    job.moveToCompleted();
   }
 }

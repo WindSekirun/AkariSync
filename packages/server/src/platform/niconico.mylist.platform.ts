@@ -11,38 +11,38 @@ axiosCookieJarSupport(axios);
 axios.defaults.withCredentials = true;
 
 export class NicoNicoMyListPlatform implements Platform {
-  platformType = "niconico_mylist";
+         static platformType = "niconico_mylist";
 
-  async getList(syncData: SyncData): Promise<VideoObject[]> {
-    await this.login();
-    makeFolder(syncData.remote);
+         async getList(targetId: string): Promise<VideoObject[]> {
+           await this.login();
+           makeFolder(process.env.TEMP_PATH, targetId);
 
-    return await handleRss(
-      `https://www.nicovideo.jp/mylist/${syncData.remote}?rss=2.0`
-    );
-  }
+           return await handleRss(
+             `https://www.nicovideo.jp/mylist/${targetId}?rss=2.0`
+           );
+         }
 
-  private async login() {
-    const userName = process.env.NICONICO_USERNAME;
-    const password = process.env.NICONICO_PASSWORD;
-    console.log(userName, password);
+         private async login() {
+           const userName = process.env.NICONICO_USERNAME;
+           const password = process.env.NICONICO_PASSWORD;
+           console.log(userName, password);
 
-    const requestURL =
-      "https://account.nicovideo.jp/api/v1/login?site=niconico&next_url=";
-    const cookieJar = new tough.CookieJar();
-    axios.defaults.jar = cookieJar;
-    await axios.post(requestURL, {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      mail_tel: userName,
-      password
-    });
+           const requestURL =
+             "https://account.nicovideo.jp/api/v1/login?site=niconico&next_url=";
+           const cookieJar = new tough.CookieJar();
+           axios.defaults.jar = cookieJar;
+           await axios.post(requestURL, {
+             // eslint-disable-next-line @typescript-eslint/camelcase
+             mail_tel: userName,
+             password
+           });
 
-    if (
-      !cookieJar
-        .getCookieStringSync("https://nicovideo.jp")
-        .includes("user_session")
-    ) {
-      throw new Error("invalid credentials");
-    }
-  }
-}
+           if (
+             !cookieJar
+               .getCookieStringSync("https://nicovideo.jp")
+               .includes("user_session")
+           ) {
+             throw new Error("invalid credentials");
+           }
+         }
+       }

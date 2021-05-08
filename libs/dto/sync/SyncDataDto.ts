@@ -1,6 +1,6 @@
 export interface SyncDataDto {
   name: string;
-  remote: string;
+  targetId: string;
   platform: string;
   extension: string;
   syncDirectory: string;
