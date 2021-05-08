@@ -22,7 +22,7 @@ export class AppController {
   }
 
   @Post("syncdata/sync/:id")
-  async requestSync(@Param() id: string) {
-    return this.appService.requestSync(id);
+  async requestSync(@Param() params) {
+    return this.appService.requestSync(params.id);
   }
 }

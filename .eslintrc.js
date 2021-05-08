@@ -1,31 +1,31 @@
-const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   rules: {
-    'no-console': isDev ? 'warn' : 'error',
-    'no-debugger': isDev ? 'warn' : 'error',
-    'prettier/prettier': isDev ? 'warn' : 'error',
-    '@typescript-eslint/explicit-function-return-type': 'off',
+    "no-console": "off",
+    "no-debugger": isDev ? "warn" : "error",
+    "prettier/prettier": isDev ? "warn" : "error",
+    "@typescript-eslint/explicit-function-return-type": "off"
   },
   overrides: [
     {
-      files: ['**/*.js'],
+      files: ["**/*.js"],
       env: {
-        node: true,
+        node: true
       },
       rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-      },
-    },
-  ],
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 };

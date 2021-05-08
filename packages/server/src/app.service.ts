@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { SyncData, SyncDataDocument } from "./schema/syncdata.schema";
 import { SyncRecord, SyncRecordDocument } from "./schema/syncrecord.schema";
 import { JobOptions, Queue } from "bull";
@@ -32,10 +32,16 @@ export class AppService {
     return this.syncDataModel.create(syncData);
   }
 
-  async requestSync(syncDataId: string) {
+  async requestSync(id: string) {
+    const _id = Types.ObjectId.createFromHexString(id);
+    const syncData = await this.syncDataModel.findById(_id);
+    if (syncData == null) {
+      throw Error("id doesn't exists in records");
+    }
+
     const job = this.syncQueue.add(
       {
-        id: syncDataId
+        syncData: syncData
       },
       this.jobOptions
     );
