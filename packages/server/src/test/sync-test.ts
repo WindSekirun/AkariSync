@@ -22,17 +22,18 @@ async function sync() {
   const extractor = new YoutubeDLExecutor();
   await client.createDirectoryIfAbsent(syncData.syncDirectory);
 
-  const tempPath = createLocalDirectoryIfAbsent(process.env.TEMP_PATH, syncData.targetId);
+  const tempPath = createLocalDirectoryIfAbsent(process.env.TEMP_PATH);
   const videoList = await platform.getList(syncData.targetId);
-  console.log(tempPath);
 
   const missingList = await extension.findMissingList(syncData.syncDirectory, client, videoList);
-  if (!missingList) {
+  if (missingList.length == 0) {
     console.log("No missing list found.");
   }
 
   const downloadedList = await Promise.all(
-    missingList.map((element) => extractor.downloadFile(platform, extension, element, tempPath))
+    missingList.map((missingFile) =>
+      extractor.downloadFile(platform, extension, missingFile, tempPath)
+    )
   );
 
   await Promise.all(

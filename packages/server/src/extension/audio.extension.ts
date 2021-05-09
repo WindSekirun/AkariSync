@@ -5,6 +5,8 @@ import path from "path";
 import sanitize from "sanitize-filename";
 
 export class AudioExtension implements Extension {
+  static extensionType = "audio";
+
   async findMissingList(
     syncDirectory: string,
     webdavclient: WebDavClient,
@@ -31,6 +33,6 @@ export class AudioExtension implements Extension {
   }
 
   getAdditionalCommand(): string[][] {
-    return [];
+    return [["--extract-audio"], ["--audio-format", "mp3"], ["--audio-quality", "0"]];
   }
 }

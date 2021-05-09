@@ -1,4 +1,4 @@
-import { join, resolve } from "path";
+import { join } from "path";
 import { VideoObject } from "../model/videoobject";
 import fs from "fs";
 import { Extension } from "../extension/extension";
@@ -20,12 +20,12 @@ export class YoutubeDLExecutor {
     tempPath: string
   ) {
     const videoTitle = extension.getTitle(videoObject);
-    const destination = resolve(tempPath, `${videoTitle}.%(ext)s`);
+    const destination = join(tempPath, `${videoTitle}.%(ext)s`);
 
     console.log(`Starting download ${videoObject.title}`);
 
     const commandList = [
-      ["python", this.binaryPath],
+      ["python3", this.binaryPath],
       ["-o", `"${destination}"`],
       [platform.getLoginString()],
       [videoObject.getDownloadLink()]
@@ -39,6 +39,6 @@ export class YoutubeDLExecutor {
     exec(command, { stdio: "inherit" });
 
     const files = fs.readdirSync(tempPath).filter((fn) => fn.startsWith(videoTitle));
-    return files[1];
+    return join(tempPath, files[0]);
   }
 }

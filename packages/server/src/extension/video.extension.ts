@@ -5,6 +5,8 @@ import path from "path";
 import sanitize from "sanitize-filename";
 
 export class VideoExtension implements Extension {
+  static extensionType = "video";
+
   async findMissingList(
     syncDirectory: string,
     webdavclient: WebDavClient,

@@ -27,11 +27,19 @@ export class WebDavClient {
     return await this.currentClient.exists(file);
   }
 
-  async writeFile(originFile: string, targetDirectory: string) {
+  async writeFile(originFile: string, targetDirectory: string): Promise<string> {
+    console.log(`Writing file ${originFile} into ${targetDirectory}`);
     const filename = path.basename(originFile);
 
-    return fs
-      .createReadStream(originFile)
-      .pipe(this.currentClient.createWriteStream(`${targetDirectory}/${filename}`));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const promise = new Promise((resolve, _reject) => {
+      const writeStream = this.currentClient.createWriteStream(`${targetDirectory}/${filename}`);
+      writeStream.on("finish", resolve);
+      fs.createReadStream(originFile).pipe(writeStream);
+    });
+
+    await promise;
+
+    return originFile;
   }
 }

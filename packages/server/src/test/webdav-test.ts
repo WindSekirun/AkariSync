@@ -12,11 +12,11 @@ async function test2() {
   const exists = await client.exists("/Data1/test");
   console.log("Directory exists ->", exists);
 
-  const file = join(__dirname, "../../../../testfile.png");
+  const file = join(__dirname, "../../../../testfile.mp3");
 
   await client.writeFile(file, "/Data1/test");
 
-  const exists2 = await client.exists("/Data1/test/testfile.png");
+  const exists2 = await client.exists("/Data1/test/testfile.mp3");
   console.log("uploaded file exists ->", exists2);
 }
 
