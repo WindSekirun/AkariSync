@@ -8,7 +8,6 @@ import { SyncData, SyncDataSchema } from "./schema/syncdata.schema";
 import { SyncRecord, SyncRecordSchema } from "./schema/syncrecord.schema";
 import { BullModule } from "@nestjs/bull";
 import { SyncQueueConsumer } from "./sync.queue.consumer";
-import { join } from "path";
 
 @Module({
   imports: [

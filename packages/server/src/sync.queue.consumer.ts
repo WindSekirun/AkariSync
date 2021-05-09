@@ -43,7 +43,7 @@ export class SyncQueueConsumer {
     }
 
     const videoList = await platform.getList(syncData.targetId);
-    const syncedList = this.webDavClient.getDirectoryContents(
+    const syncedList = await this.webDavClient.getDirectoryContents(
       syncData.syncDirectory
     );
     console.log(syncedList);

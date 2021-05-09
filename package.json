@@ -1,6 +1,7 @@
 {
   "name": "akari-sync",
   "private": true,
+  "license": "MIT",
   "workspaces": {
     "packages": [
       "packages/*",

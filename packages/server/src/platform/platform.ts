@@ -1,5 +1,9 @@
-import { SyncData } from "src/schema/syncdata.schema";
+import { VideoObject } from "../model/videoobject";
 
 export interface Platform {
-  getList(targetId: string);
+  getList(targetId: string): Promise<VideoObject[]>;
+
+  getLoginString(): string;
+
+  getDownloadLink(videoObject: VideoObject): string;
 }

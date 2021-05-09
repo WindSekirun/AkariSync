@@ -1,11 +1,10 @@
 import fs from "fs";
+import { resolve } from "path";
 
-export function makeFolder(tempPath: string, id: string) {
-  if (!fs.existsSync(`${tempPath}/videos/`)) {
-    fs.mkdirSync(`${tempPath}/videos/`);
+export function createLocalDirectoryIfAbsent(tempPath: string, id: string) {
+  const idFolder = resolve(tempPath, "videos", id);
+  if (!fs.existsSync(idFolder)) {
+    fs.mkdirSync(idFolder, { recursive: true });
   }
-
-  if (!fs.existsSync(`${tempPath}/videos/${id}`)) {
-    fs.mkdirSync(`${tempPath}/videos/${id}`);
-  }
+  return resolve("videos", id);
 }

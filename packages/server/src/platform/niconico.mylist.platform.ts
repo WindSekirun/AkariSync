@@ -1,48 +1,39 @@
-import { VideoObject } from "src/model/videoobject";
-import { SyncData } from "src/schema/syncdata.schema";
-import { Platform } from "./platform";
-import axiosCookieJarSupport from "axios-cookiejar-support";
-import tough from "tough-cookie";
+import { VideoObject } from "../model/videoobject";
+import { Platform } from "../platform/platform";
+import { NicoNicoPlatform } from "./niconico.platform";
 import axios from "axios";
-import { handleRss } from "src/utils/rss";
-import { makeFolder } from "src/utils/folder";
+import { AxiosResponse } from "axios";
+import Parser from "rss-parser";
+import axiosCookieJarSupport from "axios-cookiejar-support";
 
 axiosCookieJarSupport(axios);
 axios.defaults.withCredentials = true;
 
-export class NicoNicoMyListPlatform implements Platform {
-         static platformType = "niconico_mylist";
+export class NicoNicoMyListPlatform extends NicoNicoPlatform implements Platform {
+  static platformType = "niconico_mylist";
 
-         async getList(targetId: string): Promise<VideoObject[]> {
-           await this.login();
-           makeFolder(process.env.TEMP_PATH, targetId);
+  async getList(targetId: string): Promise<VideoObject[]> {
+    const cookieJar = await this.login();
 
-           return await handleRss(
-             `https://www.nicovideo.jp/mylist/${targetId}?rss=2.0`
-           );
-         }
+    const url = `https://www.nicovideo.jp/mylist/${targetId}?rss=2.0`;
+    axios.defaults.jar = cookieJar;
+    const response = await axios.get(url);
+    return this.handleRss(response);
+  }
 
-         private async login() {
-           const userName = process.env.NICONICO_USERNAME;
-           const password = process.env.NICONICO_PASSWORD;
-           console.log(userName, password);
-
-           const requestURL =
-             "https://account.nicovideo.jp/api/v1/login?site=niconico&next_url=";
-           const cookieJar = new tough.CookieJar();
-           axios.defaults.jar = cookieJar;
-           await axios.post(requestURL, {
-             // eslint-disable-next-line @typescript-eslint/camelcase
-             mail_tel: userName,
-             password
-           });
-
-           if (
-             !cookieJar
-               .getCookieStringSync("https://nicovideo.jp")
-               .includes("user_session")
-           ) {
-             throw new Error("invalid credentials");
-           }
-         }
-       }
+  private async handleRss(response: AxiosResponse): Promise<VideoObject[]> {
+    const parser = new Parser();
+    const feed = await parser.parseString(response.data);
+    return (feed.items ?? [])
+      .sort((a, b) => {
+        const aDate = Date.parse(a.pubDate || "");
+        const bDate = Date.parse(b.pubDate || "");
+        return aDate - bDate;
+      })
+      .map(
+        (item, index: number) =>
+          new VideoObject(index, item.title, item.link, (this as unknown) as Platform)
+      )
+      .sort((a, b) => (a.index < b.index ? -1 : a.index > b.index ? 1 : 0));
+  }
+}
