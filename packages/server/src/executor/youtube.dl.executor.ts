@@ -7,12 +7,6 @@ import { Platform } from "src/platform/platform";
 const exec = require("child_process").execSync;
 
 export class YoutubeDLExecutor {
-  binaryPath: string;
-
-  constructor() {
-    this.binaryPath = join(__dirname, "../../../../youtube-dl/youtube_dl/__main__.py");
-  }
-
   async downloadFile(
     platform: Platform,
     extension: Extension,
@@ -25,7 +19,7 @@ export class YoutubeDLExecutor {
     console.log(`Starting download ${videoObject.title}`);
 
     const commandList = [
-      ["python3", this.binaryPath],
+      ["yt-dlp"],
       ["-o", `"${destination}"`],
       [platform.getLoginString()],
       [videoObject.getDownloadLink()]
@@ -40,5 +34,13 @@ export class YoutubeDLExecutor {
 
     const files = fs.readdirSync(tempPath).filter((fn) => fn.startsWith(videoTitle));
     return join(tempPath, files[0]);
+  }
+
+  async getPlayList(url: string) {
+    const commandList = [["yt-dlp"], ["-j"], [`"${url}"`]];
+
+    const command = commandList.map((element) => element.join(" ")).join(" ");
+    const output = exec(command, { stdio: "inherit" }).toString("utf8");
+    console.log(output);
   }
 }

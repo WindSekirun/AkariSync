@@ -5,9 +5,9 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { configFactory, configSchema } from "./config";
 import { SyncData, SyncDataSchema } from "./schema/syncdata.schema";
-import { SyncRecord, SyncRecordSchema } from "./schema/syncrecord.schema";
 import { BullModule } from "@nestjs/bull";
 import { SyncQueueConsumer } from "./sync.queue.consumer";
+import { join } from "path";
 
 @Module({
   imports: [
@@ -23,17 +23,15 @@ import { SyncQueueConsumer } from "./sync.queue.consumer";
       }),
       inject: [ConfigService]
     }),
-    MongooseModule.forFeature([
-      { name: SyncData.name, schema: SyncDataSchema },
-      { name: SyncRecord.name, schema: SyncRecordSchema }
-    ]),
+    MongooseModule.forFeature([{ name: SyncData.name, schema: SyncDataSchema }]),
     BullModule.forRootAsync({
       imports: [BullModule],
       useFactory: async (configService: ConfigService) => ({
         redis: {
           host: configService.get<string>("redisUrl"),
           port: 6379
-        }
+        },
+        processors: [join(__dirname, "sync.queue.processor.js")]
       }),
       inject: [ConfigService]
     }),

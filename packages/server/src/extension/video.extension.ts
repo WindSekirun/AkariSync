@@ -34,6 +34,6 @@ export class VideoExtension implements Extension {
   }
 
   getAdditionalCommand(): string[][] {
-    return [["--extract-audio"], ["--audio-format", "mp3"], ["--audio-quality", "0"]];
+    return [];
   }
 }

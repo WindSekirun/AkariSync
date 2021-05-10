@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { SyncData, SyncDataDocument } from "./schema/syncdata.schema";
-import { SyncRecord, SyncRecordDocument } from "./schema/syncrecord.schema";
 import { JobOptions, Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 
@@ -11,8 +10,6 @@ export class AppService {
   constructor(
     @InjectModel(SyncData.name)
     protected syncDataModel: Model<SyncDataDocument>,
-    @InjectModel(SyncRecord.name)
-    protected syncRecordModel: Model<SyncRecordDocument>,
     @InjectQueue("syncQueue") private syncQueue: Queue
   ) {}
 

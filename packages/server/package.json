@@ -13,7 +13,8 @@
     "test": "jest",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "webdav-test": "ts-node src/test/webdav-test.ts",
-    "sync-test": "ts-node src/test/sync-test.ts"
+    "sync-test": "ts-node src/test/sync-test.ts",
+    "youtube-platform-test": "ts-node src/test/youtube-platform-test.ts"
   },
   "dependencies": {
     "@akari-sync/dto": "^0.0.1",
