@@ -36,11 +36,26 @@ export class YoutubeDLExecutor {
     return join(tempPath, files[0]);
   }
 
-  async getPlayList(url: string) {
-    const commandList = [["yt-dlp"], ["-j"], [`"${url}"`]];
+  async getPlayList(url: string, platform: Platform): Promise<VideoObject[]> {
+    const commandList = [["yt-dlp"], ["--get-title", "--get-id"], [`"${url}"`]];
 
     const command = commandList.map((element) => element.join(" ")).join(" ");
-    const output = exec(command, { stdio: "inherit" }).toString("utf8");
-    console.log(output);
+    const output: string = exec(command, { encoding: "UTF-8" }).toString();
+
+    return this.chunk(output.split("\n"), 2)
+      .filter((element) => element.length == 2)
+      .map((value, index) => new VideoObject(index, value[0], value[1], platform));
+  }
+
+  private chunk<T>(arr: T[], len: number) {
+    const chunks = [];
+    let i = 0;
+    const n = arr.length;
+
+    while (i < n) {
+      chunks.push(arr.slice(i, (i += len)));
+    }
+
+    return chunks;
   }
 }

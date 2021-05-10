@@ -10,6 +10,7 @@ import fs from "fs";
 import { YoutubeDLExecutor } from "./executor/youtube.dl.executor";
 import { TelegramNotifyExecutor } from "./executor/telegram.dl.executor";
 import { WebDavClient } from "./webdav/webdavclient";
+import { YoutubePlayListPlatform } from "./platform/youtube.playlist.platform";
 
 export default async function (job: Job, cb: DoneCallback) {
   const webDavClient = new WebDavClient();
@@ -23,6 +24,8 @@ export default async function (job: Job, cb: DoneCallback) {
   let platform: Platform;
   if (syncData.platform == NicoNicoMyListPlatform.platformType) {
     platform = new NicoNicoMyListPlatform();
+  } else if (syncData.platform == YoutubePlayListPlatform.platformType) {
+    platform = new YoutubePlayListPlatform();
   }
 
   // extension matching
@@ -31,6 +34,12 @@ export default async function (job: Job, cb: DoneCallback) {
     extension = new AudioExtension();
   } else if (syncData.extension == VideoExtension.extensionType) {
     extension = new VideoExtension();
+  }
+
+  if (!platform || !extension) {
+    console.log("Can't find available extensions");
+    cb();
+    return;
   }
 
   await webDavClient.createDirectoryIfAbsent(syncData.syncDirectory);

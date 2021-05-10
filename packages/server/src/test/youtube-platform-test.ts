@@ -5,9 +5,12 @@ require("dotenv").config();
 
 async function platform() {
   const youtubeDLExecutor = new YoutubeDLExecutor();
-  youtubeDLExecutor.getPlayList(
-    "https://www.youtube.com/playlist?list=PLq1XYNuoV1jKy3NsiiYSHAik6TMIQIHVF"
+  const platform = new YoutubePlayListPlatform();
+  const result = await youtubeDLExecutor.getPlayList(
+    "https://www.youtube.com/playlist?list=PLcjfcO0ddWk9ueVTnp4BDFBOHOFC3GlFY",
+    platform
   );
+  console.log(result);
 }
 
 platform();
