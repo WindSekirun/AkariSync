@@ -11,6 +11,7 @@ import { YoutubeDLExecutor } from "./executor/youtube.dl.executor";
 import { TelegramNotifyExecutor } from "./executor/telegram.dl.executor";
 import { WebDavClient } from "./webdav/webdavclient";
 import { YoutubePlayListPlatform } from "./platform/youtube.playlist.platform";
+import { NicoNicoSeriesPlatform } from "./platform/niconico.series.platform";
 
 export default async function (job: Job, cb: DoneCallback) {
   const webDavClient = new WebDavClient();
@@ -26,6 +27,8 @@ export default async function (job: Job, cb: DoneCallback) {
     platform = new NicoNicoMyListPlatform();
   } else if (syncData.platform == YoutubePlayListPlatform.platformType) {
     platform = new YoutubePlayListPlatform();
+  } else if (syncData.platform == NicoNicoSeriesPlatform.platformType) {
+    platform = new NicoNicoSeriesPlatform();
   }
 
   // extension matching
