@@ -9,12 +9,12 @@ import { createLocalDirectoryIfAbsent } from "./utils/folder";
 import fs from "fs";
 import { YoutubeDLExecutor } from "./executor/youtube.dl.executor";
 import { TelegramNotifyExecutor } from "./executor/telegram.dl.executor";
-import { WebDavClient } from "./webdav/webdavclient";
 import { YoutubePlayListPlatform } from "./platform/youtube.playlist.platform";
 import { NicoNicoSeriesPlatform } from "./platform/niconico.series.platform";
+import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 
 export default async function (job: Job, cb: DoneCallback) {
-  const webDavClient = new WebDavClient();
+  const webDavClient = WebDavClient.fromEnv();
   const youtubeDLExecutor = new YoutubeDLExecutor();
   const telegramNotifyExecutor = new TelegramNotifyExecutor();
 

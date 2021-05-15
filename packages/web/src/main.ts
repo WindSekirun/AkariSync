@@ -10,6 +10,7 @@ import { baseDomain } from "./Constants";
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
+Vue.axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 Vue.axios.defaults.baseURL = baseDomain;
 
 new Vue({

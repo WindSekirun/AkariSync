@@ -1,5 +1,5 @@
 import { VideoObject } from "src/model/videoobject";
-import { WebDavClient } from "src/webdav/webdavclient";
+import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 
 export interface Extension {
   findMissingList(

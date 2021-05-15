@@ -1,5 +1,5 @@
 import { VideoObject } from "../model/videoobject";
-import { WebDavClient } from "../webdav/webdavclient";
+import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 import { Extension } from "./extension";
 import path from "path";
 import sanitize from "sanitize-filename";

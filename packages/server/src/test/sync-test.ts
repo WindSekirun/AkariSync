@@ -1,8 +1,7 @@
 import { createLocalDirectoryIfAbsent } from "../utils/folder";
 import { YoutubeDLExecutor } from "../executor/youtube.dl.executor";
-import { VideoExtension } from "../extension/video.extension";
 import { NicoNicoMyListPlatform } from "../platform/niconico.mylist.platform";
-import { WebDavClient } from "../webdav/webdavclient";
+import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 import { AudioExtension } from "../extension/audio.extension";
 import fs from "fs";
 
@@ -16,7 +15,7 @@ async function sync() {
     syncDirectory: "/Data1/test/niconico/71008452",
     targetId: "71008452"
   };
-  const client = new WebDavClient();
+  const client = WebDavClient.fromEnv();
   const platform = new NicoNicoMyListPlatform();
   const extension = new AudioExtension();
   const extractor = new YoutubeDLExecutor();

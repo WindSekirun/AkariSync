@@ -1,7 +1,5 @@
 module.exports = {
-  transpileDependencies: [
-    'vuetify'
-  ],
+  transpileDependencies: ["vuetify"],
 
   pluginOptions: {
     i18n: {
@@ -11,4 +9,4 @@ module.exports = {
       enableInSFC: undefined
     }
   }
-}
+};

@@ -1,10 +1,10 @@
-import { WebDavClient } from "../webdav/webdavclient";
+import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 import { join } from "path";
 
 require("dotenv").config();
 
 async function test2() {
-  const client = new WebDavClient();
+  const client = WebDavClient.fromEnv();
 
   const list = await client.getDirectoryContents("/");
   console.log("Directory contents ->", list);

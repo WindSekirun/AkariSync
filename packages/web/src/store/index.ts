@@ -23,7 +23,6 @@ export default new Vuex.Store({
   actions: {
     async [LOAD_MAIN_LIST]({ commit }) {
       const response = await Vue.axios.get("/syncdata/list");
-      console.log(response.data);
       commit(SAVE_MAIN_LIST, response.data);
     }
   },
