@@ -25,6 +25,10 @@ export class AppService {
     return this.syncDataModel.find();
   }
 
+  async getSyncData(id: string): Promise<SyncData> {
+    return this.syncDataModel.findById(id);
+  }
+
   async createSyncData(syncData: SyncData): Promise<SyncData> {
     return this.syncDataModel.create(syncData);
   }

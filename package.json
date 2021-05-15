@@ -14,8 +14,8 @@
   "scripts": {
     "api": "yarn workspace @akari-sync/api",
     "web": "yarn workspace @akari-sync/web",
-    "build": "concurrently -n \"api\" \"yarn api build\"",
-    "start": "concurrently -k \"yarn api start:dev\"",
+    "build": "concurrently -n \"api,web\" \"yarn api build\" \"yarn web build\"",
+    "start": "concurrently -k \"yarn api start:dev\" \"yarn web serve\"",
     "bootstrap": "lerna bootstrap",
     "format": "yarn lint --fix && prettier --write **/*.{html,scss,json}",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.vue"

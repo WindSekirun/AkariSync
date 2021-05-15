@@ -16,6 +16,11 @@ export class AppController {
     return this.appService.getSyncDataList();
   }
 
+  @Get("syncdata/:id")
+  async getSyncData(@Param() params): Promise<SyncData> {
+    return this.appService.getSyncData(params.id);
+  }
+
   @Put("syncdata/create")
   async createSyncData(@Body() syncData: SyncData): Promise<SyncData> {
     return this.appService.createSyncData(syncData);
