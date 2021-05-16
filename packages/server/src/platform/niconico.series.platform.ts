@@ -5,12 +5,15 @@ import axios from "axios";
 import { AxiosResponse } from "axios";
 import Parser from "rss-parser";
 import axiosCookieJarSupport from "axios-cookiejar-support";
+import { YoutubeDLExecutor } from "src/executor/youtube.dl.executor";
 
 axiosCookieJarSupport(axios);
 axios.defaults.withCredentials = true;
 
 export class NicoNicoSeriesPlatform extends NicoNicoPlatform implements Platform {
   static platformType = "niconico_series";
+
+  youtubeDLExecutor = new YoutubeDLExecutor();
 
   async getList(targetId: string): Promise<VideoObject[]> {
     const cookieJar = await this.login();
@@ -19,6 +22,12 @@ export class NicoNicoSeriesPlatform extends NicoNicoPlatform implements Platform
     axios.defaults.jar = cookieJar;
     const response = await axios.get(url);
     return this.handleRss(response);
+  }
+
+  async getThumbnail(targetId: string) {
+    const list = await this.getList(targetId);
+    const video = list[list.length - 1];
+    return this.youtubeDLExecutor.getThumbnail(video.link);
   }
 
   private async handleRss(response: AxiosResponse): Promise<VideoObject[]> {

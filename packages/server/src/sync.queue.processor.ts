@@ -1,16 +1,11 @@
+import fs from "fs";
 import { Job, DoneCallback } from "bull";
-import { AudioExtension } from "./extension/audio.extension";
-import { Extension } from "./extension/extension";
-import { VideoExtension } from "./extension/video.extension";
-import { NicoNicoMyListPlatform } from "./platform/niconico.mylist.platform";
-import { Platform } from "./platform/platform";
+import { findExtension } from "./extension/extension";
+import { findPlatform } from "./platform/platform";
 import { SyncData } from "./schema/syncdata.schema";
 import { createLocalDirectoryIfAbsent } from "./utils/folder";
-import fs from "fs";
 import { YoutubeDLExecutor } from "./executor/youtube.dl.executor";
-import { TelegramNotifyExecutor } from "./executor/telegram.dl.executor";
-import { YoutubePlayListPlatform } from "./platform/youtube.playlist.platform";
-import { NicoNicoSeriesPlatform } from "./platform/niconico.series.platform";
+import { TelegramNotifyExecutor } from "./executor/telegram.notify.executor";
 import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 
 export default async function (job: Job, cb: DoneCallback) {
@@ -21,23 +16,8 @@ export default async function (job: Job, cb: DoneCallback) {
   const syncData: SyncData = job.data.syncData;
   console.log(`Sync Started for ${syncData.name}`);
 
-  // platform matching
-  let platform: Platform;
-  if (syncData.platform == NicoNicoMyListPlatform.platformType) {
-    platform = new NicoNicoMyListPlatform();
-  } else if (syncData.platform == YoutubePlayListPlatform.platformType) {
-    platform = new YoutubePlayListPlatform();
-  } else if (syncData.platform == NicoNicoSeriesPlatform.platformType) {
-    platform = new NicoNicoSeriesPlatform();
-  }
-
-  // extension matching
-  let extension: Extension;
-  if (syncData.extension == AudioExtension.extensionType) {
-    extension = new AudioExtension();
-  } else if (syncData.extension == VideoExtension.extensionType) {
-    extension = new VideoExtension();
-  }
+  const platform = findPlatform(syncData.platform);
+  const extension = findExtension(syncData.extension);
 
   if (!platform || !extension) {
     console.log("Can't find available extensions");

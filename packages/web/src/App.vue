@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar app color="#ff9800" flat>
+    <v-app-bar app color="orange" flat>
       <v-container class="py-0 fill-height">
         <v-avatar class="mr-10" color="grey darken-1" size="32">
           <img src="./assets/profile_akari_square.png" />
         </v-avatar>
 
-        <b>AkariSync</b>
+        <b><font color="#ffffff">AkariSync</font></b>
         <v-spacer />
         <v-tooltip v-if="!$vuetify.theme.dark" bottom>
           <template v-slot:activator="{ on }">
@@ -27,8 +27,8 @@
         </v-tooltip>
       </v-container>
     </v-app-bar>
-    <v-main class="grey lighten-3">
-      <v-container>
+    <v-main :class="mainClass">
+      <v-container fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -42,8 +42,21 @@ import { Component, Vue } from "vue-property-decorator";
 export default class App extends Vue {
   $vuetify: any;
 
+  get mainClass() {
+    if (this.$vuetify.theme.dark) {
+      return "lighten-3";
+    } else {
+      return "grey lighten-3";
+    }
+  }
+
+  mounted() {
+    this.$vuetify.theme.dark = window.localStorage.darkMode == "true";
+  }
+
   darkMode() {
     this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    window.localStorage.darkMode = this.$vuetify.theme.dark.toString();
   }
 }
 </script>

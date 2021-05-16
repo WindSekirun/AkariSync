@@ -14,6 +14,12 @@ export class YoutubePlayListPlatform implements Platform {
     );
   }
 
+  async getThumbnail(targetId: string) {
+    const list = await this.getList(targetId);
+    const video = list[list.length - 1];
+    return this.youtubeDLExecutor.getThumbnail(video.link);
+  }
+
   getLoginString(): string {
     // currently, we don't support login feature in youtube platform.
     return ``;

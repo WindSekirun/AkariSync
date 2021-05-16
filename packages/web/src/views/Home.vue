@@ -1,18 +1,17 @@
 <template>
-  <v-sheet rounded="lg" class="pa-2" min-height="80vh">
-    <h2>Instant</h2>
-    <remote-folder-selector />
-    <h2>List</h2>
+  <v-sheet rounded="lg" class="pa-5">
+    <v-btn block color="orange" class="mb-5"> Add new Entry </v-btn>
+    <sync-data-view />
   </v-sheet>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import RemoteFolderSelector from "@/component/RemoteFolderSelector.vue";
+import SyncDataView from "@/component/SyncDataView.vue";
 
 @Component({
   components: {
-    RemoteFolderSelector
+    SyncDataView
   }
 })
 export default class Home extends Vue {}

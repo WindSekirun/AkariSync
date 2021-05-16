@@ -47,6 +47,13 @@ export class YoutubeDLExecutor {
       .map((value, index) => new VideoObject(index, value[0], value[1], platform));
   }
 
+  async getThumbnail(url: string): Promise<string> {
+    const commandList = [["yt-dlp"], ["--get-thumbnail"], [`"${url}"`]];
+    const command = commandList.map((element) => element.join(" ")).join(" ");
+    const output: string = exec(command, { encoding: "UTF-8" }).toString();
+    return output.replace("\n", "");
+  }
+
   private chunk<T>(arr: T[], len: number) {
     const chunks = [];
     let i = 0;

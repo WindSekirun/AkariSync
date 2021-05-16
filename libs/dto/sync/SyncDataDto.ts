@@ -4,4 +4,5 @@ export interface SyncDataDto {
   platform: string;
   extension: string;
   syncDirectory: string;
+  thumbnail: string;
 }

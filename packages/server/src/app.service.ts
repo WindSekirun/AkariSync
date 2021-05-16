@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { SyncData, SyncDataDocument } from "./schema/syncdata.schema";
 import { JobOptions, Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
+import { ThumbnailFindExecutor } from "./executor/thumbnail.find.executor";
 
 @Injectable()
 export class AppService {
@@ -12,6 +13,7 @@ export class AppService {
     protected syncDataModel: Model<SyncDataDocument>,
     @InjectQueue("syncQueue") private syncQueue: Queue
   ) {}
+  thumbnailFindExecutor = new ThumbnailFindExecutor();
 
   jobOptions: JobOptions = {
     removeOnComplete: true
@@ -30,6 +32,10 @@ export class AppService {
   }
 
   async createSyncData(syncData: SyncData): Promise<SyncData> {
+    syncData.thumbnail = await this.thumbnailFindExecutor.find(
+      syncData.targetId,
+      syncData.platform
+    );
     return this.syncDataModel.create(syncData);
   }
 
@@ -44,13 +50,7 @@ export class AppService {
     });
   }
 
-  async requestSync(id: string) {
-    const _id = Types.ObjectId.createFromHexString(id);
-    const syncData = await this.syncDataModel.findById(_id);
-    if (syncData == null) {
-      throw Error("id doesn't exists in records");
-    }
-
+  async requestSync(syncData: SyncData) {
     const job = this.syncQueue.add(
       {
         syncData: syncData

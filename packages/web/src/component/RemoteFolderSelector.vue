@@ -2,7 +2,7 @@
   <div>
     <v-dialog v-model="dialog" scrollable max-width="80vh">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="info lighten-2" dark v-bind="attrs" v-on="on">
+        <v-btn color="orange lighten-1" dark v-bind="attrs" v-on="on">
           Open Folder Selector
         </v-btn>
       </template>
@@ -15,7 +15,6 @@
         <v-card-text style="height: 300px;">
           <v-list-item
             @click="clickNode(item)"
-            @dblclick="doubleClickNode(item)"
             v-for="(item, index) in items"
             :key="index"
             class="mb-2"
@@ -30,15 +29,12 @@
         </v-card-text>
         <v-divider />
         <v-card-actions>
-          <v-btn color="info" class="me-2" @click="clickParent()">
-            <v-icon>mdi-chevron-left</v-icon> Parent
-          </v-btn>
           <v-spacer />
-          <v-btn color="blue darken-1" text @click="dialog = false">
+          <v-btn color="grey darken-1" text @click="dialog = false">
             Close
           </v-btn>
-          <v-btn color="primary" class="me-2" @click="clickConfirm()">
-            <v-icon>mdi-check</v-icon> Confirm
+          <v-btn color="orange darken-1" text @click="clickConfirm()">
+            Confirm
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -49,19 +45,25 @@
 <script lang="ts">
 import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 import { FileStat } from "webdav";
-import { Component, Prop, Vue } from "vue-property-decorator";
-import uuidv4 from "uuid/v4";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { DESCRIPTION_FOLDER_SELECT } from "../Constants";
 
 class FolderItem {
-  id: string;
   name: string;
   path: string;
 
-  constructor(fileStat: FileStat) {
-    this.id = uuidv4();
-    this.name = fileStat.basename;
-    this.path = fileStat.filename + "/";
+  static fromStat(fileStat: FileStat) {
+    const item = new FolderItem();
+    item.name = fileStat.basename;
+    item.path = fileStat.filename + "/";
+    return item;
+  }
+
+  static parent() {
+    const item = new FolderItem();
+    item.name = "../";
+    item.path = "Move to Parent";
+    return item;
   }
 }
 
@@ -75,6 +77,15 @@ export default class RemoteFolderSelector extends Vue {
   selectedPath: string | null = null;
   parent: string;
   dialog: boolean | null = false;
+  parentItem = FolderItem.parent();
+
+  @Watch("dialog")
+  async onDialogStateChanged(newValue: boolean) {
+    if (newValue) {
+      this.selectedPath = "/";
+      await this.loadPath("/", false);
+    }
+  }
 
   async mounted() {
     this.webdavClient = new WebDavClient(
@@ -83,7 +94,7 @@ export default class RemoteFolderSelector extends Vue {
       process.env.VUE_APP_WEBDAV_PASSWORD
     );
 
-    await this.loadPath("/");
+    await this.loadPath("/", false);
   }
 
   clickConfirm() {
@@ -91,30 +102,28 @@ export default class RemoteFolderSelector extends Vue {
     this.dialog = false;
   }
 
-  async clickParent() {
-    console.log("parent click", this.parent);
-    if (this.parent) {
+  async clickNode(node: FolderItem) {
+    if (node.name == "../" && this.parent) {
       this.selectedPath = this.parent;
       await this.loadPath(this.parent);
+    } else {
+      this.selectedPath = node.path;
+      await this.loadPath(node.path);
     }
   }
 
-  async clickNode(node: FolderItem) {
-    this.selectedPath = node.path;
-  }
-
-  async doubleClickNode(node: FolderItem) {
-    this.selectedPath = node.path;
-    await this.loadPath(node.path);
-  }
-
-  private async loadPath(path: string) {
+  private async loadPath(path: string, includeParent: boolean = true) {
     const main = await this.webdavClient.getDirectoryContents(path);
     const folderItemList = main
       .filter((element) => element.type == "directory")
       .filter((element) => !parent || element.basename != parent.name)
-      .map((element) => new FolderItem(element));
-    this.items = folderItemList;
+      .map((element) => FolderItem.fromStat(element));
+
+    this.items = [];
+    if (includeParent) {
+      this.items.push(this.parentItem);
+    }
+    this.items.push(...folderItemList);
 
     this.calculateParent(path);
     this.$forceUpdate();

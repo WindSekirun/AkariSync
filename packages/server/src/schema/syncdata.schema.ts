@@ -16,6 +16,8 @@ export class SyncData implements SyncDataDto {
   extension: string;
   @Prop({ required: true })
   syncDirectory: string;
+  @Prop({ required: true })
+  thumbnail: string;
 }
 
 export const SyncDataSchema = SchemaFactory.createForClass(SyncData);

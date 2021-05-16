@@ -36,8 +36,8 @@ export class AppController {
     return this.appService.updateSyncData(params.id, syncData);
   }
 
-  @Post("syncdata/sync/:id")
-  async requestSync(@Param() params) {
-    return this.appService.requestSync(params.id);
+  @Post("syncdata/sync/")
+  async requestSync(@Body() syncData: SyncData) {
+    return this.appService.requestSync(syncData);
   }
 }
