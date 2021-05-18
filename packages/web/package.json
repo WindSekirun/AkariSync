@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "rimraf ../../dist/web",
     "serve": "vue-cli-service serve --mode local",
     "build": "vue-cli-service build",
     "build:analyze": "vue-cli-service build --report",
