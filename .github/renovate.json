@@ -11,6 +11,7 @@
         "matchCurrentVersion": "!/^0/",
         "automerge": true
       }
-    ]
+    ],
+    "ignoreDeps": ["sass-loader"]
   }
   
