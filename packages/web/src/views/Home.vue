@@ -1,6 +1,5 @@
 <template>
   <v-sheet rounded="lg" class="pa-5">
-    <v-btn block color="orange" class="mb-5"> Add new Entry </v-btn>
     <sync-data-view />
   </v-sheet>
 </template>

@@ -7,7 +7,7 @@
         </v-btn>
       </template>
       <v-card class="pa-2">
-        <v-card-title>Folder Selector</v-card-title>
+        <v-card-title class="headline">Folder Selector</v-card-title>
         <v-card-subtitle>
           {{ description }} <br />
           Selected Path: {{ selectedPath }}
@@ -29,6 +29,31 @@
         </v-card-text>
         <v-divider />
         <v-card-actions>
+          <!-- make directory -->
+          <v-dialog v-model="directoryDialog" max-width="80vh" persistent>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="orange darken-1" text v-bind="attrs" v-on="on">
+                Make Directory
+              </v-btn>
+            </template>
+
+            <v-card class="pa-2">
+              <v-card-title class="headline">Make new Folder</v-card-title>
+              <v-card-text class="mt-5">
+                <v-text-field v-model="directoryName" label="Directory Name" color="orange" />
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="orange darken-1" text @click="directoryDialog = false">
+                  Close
+                </v-btn>
+                <v-btn color="orange darken-1" text @click="clickMakeDirectory()">
+                  Make
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
           <v-spacer />
           <v-btn color="grey darken-1" text @click="dialog = false">
             Close
@@ -39,6 +64,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar">
+      {{ snackbarText }}
+    </v-snackbar>
+    <loading-overlay-view ref="overlay" />
   </div>
 </template>
 
@@ -47,6 +76,7 @@ import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
 import { FileStat } from "webdav";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { DESCRIPTION_FOLDER_SELECT } from "../Constants";
+import LoadingOverlayView from "@/component/LoadingOverlayView.vue";
 
 class FolderItem {
   name: string;
@@ -68,15 +98,24 @@ class FolderItem {
 }
 
 @Component({
-  components: {}
+  components: {
+    LoadingOverlayView
+  }
 })
 export default class RemoteFolderSelector extends Vue {
   @Prop({ type: String, default: DESCRIPTION_FOLDER_SELECT }) description: string;
   webdavClient: WebDavClient;
   items: FolderItem[] = [];
   selectedPath: string | null = null;
-  parent: string;
+
   dialog: boolean | null = false;
+  directoryDialog: boolean | null = false;
+
+  snackbar: boolean | null = false;
+  snackbarText: string = "";
+
+  directoryName: string | null = null;
+  parent: string;
   parentItem = FolderItem.parent();
 
   @Watch("dialog")
@@ -95,6 +134,23 @@ export default class RemoteFolderSelector extends Vue {
     );
 
     await this.loadPath("/", false);
+  }
+
+  async clickMakeDirectory() {
+    if (!this.directoryName) {
+      this.snackbarText = "Directory can't be empty!";
+      this.snackbar = true;
+      return;
+    }
+
+    const overlayView = this.$refs.overlay as LoadingOverlayView;
+    overlayView.showOverlay();
+
+    await this.webdavClient.createDirectoryIfAbsent(this.selectedPath + this.directoryName);
+    await this.loadPath(this.selectedPath || "");
+    overlayView.hideOverlay();
+
+    this.directoryDialog = false;
   }
 
   clickConfirm() {

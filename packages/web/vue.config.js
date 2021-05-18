@@ -8,5 +8,9 @@ module.exports = {
       localeDir: undefined,
       enableInSFC: undefined
     }
+  },
+
+  devServer: {
+    progress: false
   }
 };

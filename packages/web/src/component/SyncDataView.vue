@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" sm="12" md="6" lg="4">
-        <v-card v-for="(item, index) in mainList" :key="index" outlined shaped>
+      <v-col cols="12" sm="12" md="6" lg="3" v-for="(item, index) in mainList" :key="index">
+        <v-card outlined shaped>
           <v-img
             max-height="250"
             :src="item.thumbnail"
@@ -19,7 +19,8 @@
           </v-img>
           <v-list-item two-line>
             <v-list-item-content>
-              <v-list-item-subtitle>Platform: {{ item.platform }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ getPlatformLabel(item) }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ getExtensionLabel(item) }} </v-list-item-subtitle>
               <v-list-item-subtitle>Sync Directory: {{ item.syncDirectory }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -37,6 +38,7 @@
     <v-snackbar v-model="snackbar">
       {{ snackbarText }}
     </v-snackbar>
+    <sync-data-detail-view ref="syncDetailView" />
   </div>
 </template>
 
@@ -44,10 +46,18 @@
 import { SyncDataDto } from "@akari-sync/dto";
 import { Component, Vue } from "vue-property-decorator";
 import { mapState } from "vuex";
-import { SyncData } from "../../../server/src/schema/syncdata.schema";
+import SyncDataDetailView from "@/component/SyncDataDetailView.vue";
+import {
+  platformList,
+  platformLabelList,
+  extensionList,
+  extensionLabelList
+} from "@akari-sync/dto/Constants";
 
 @Component({
-  components: {},
+  components: {
+    SyncDataDetailView
+  },
   computed: {
     ...mapState({
       mainList: "mainList"
@@ -59,15 +69,22 @@ export default class SyncDataView extends Vue {
   snackbar: boolean | null = false;
   snackbarText: string = "";
 
-  mounted() {
-    console.log(this.mainList);
+  getExtensionLabel(syncData: SyncDataDto) {
+    return `Extension: ` + extensionLabelList[extensionList.indexOf(syncData.extension)];
   }
 
-  clickEdit(syncData: SyncData) {}
+  getPlatformLabel(syncData: SyncDataDto) {
+    return `Platform: ` + platformLabelList[platformList.indexOf(syncData.platform)];
+  }
 
-  async clickSync(syncData: SyncData) {
-    const response = await Vue.axios.post("/syncdata/sync", syncData);
-    this.snackbarText = `${syncData.name} 가 요청되었습니다.`;
+  clickEdit(syncData: SyncDataDto) {
+    const detailView = this.$refs.syncDetailView as SyncDataDetailView;
+    detailView.openDialog(syncData);
+  }
+
+  async clickSync(syncData: SyncDataDto) {
+    await Vue.axios.post("/syncdata/sync", syncData);
+    this.snackbarText = `${syncData.name} is requested.`;
     this.snackbar = true;
   }
 }

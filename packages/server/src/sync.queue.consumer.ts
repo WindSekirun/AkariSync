@@ -1,4 +1,4 @@
-import { OnQueueActive, OnQueueWaiting, Process, Processor } from "@nestjs/bull";
+import { OnQueueActive, OnQueueWaiting, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 
 @Processor("syncQueue")

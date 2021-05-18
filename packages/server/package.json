@@ -17,8 +17,8 @@
     "youtube-platform-test": "ts-node src/test/youtube-platform-test.ts"
   },
   "dependencies": {
-    "@akari-sync/dto": "^0.0.1",
-    "@akari-sync/util": "^0.0.1",
+    "@akari-sync/dto": "0.0.1",
+    "@akari-sync/util": "0.0.1",
     "@hapi/joi": "^17.1.0",
     "@nestjs/bull": "^0.3.1",
     "@nestjs/common": "^6.11.7",

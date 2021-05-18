@@ -5,7 +5,7 @@ export const configSchema = Joi.object({
   NODE_ENV: Joi.string()
     .valid("development", "ci", "staging", "production", "demo")
     .default("production"),
-  PORT: Joi.number().port().default(3000),
+  PORT: Joi.number().port().default(4500),
   GLOBAL_PREFIX: Joi.string().default("api"),
   CORS_ORIGIN: Joi.string().default("localhost"),
   MONGO_URL: Joi.string().required(),

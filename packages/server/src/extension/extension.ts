@@ -24,3 +24,4 @@ export function findExtension(extensionString: string): Extension {
   }
   return extension;
 }
+

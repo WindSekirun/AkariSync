@@ -6,7 +6,7 @@ import { SyncData } from "./schema/syncdata.schema";
 import { createLocalDirectoryIfAbsent } from "./utils/folder";
 import { YoutubeDLExecutor } from "./executor/youtube.dl.executor";
 import { TelegramNotifyExecutor } from "./executor/telegram.notify.executor";
-import { WebDavClient } from "@akari-sync/util/webdav/webdavclient";
+import { WebDavClient } from "./utils/webdavclient";
 
 export default async function (job: Job, cb: DoneCallback) {
   const webDavClient = WebDavClient.fromEnv();
@@ -40,6 +40,8 @@ export default async function (job: Job, cb: DoneCallback) {
     cb();
     return;
   }
+
+  console.log("Missing List", missingList);
 
   const downloadedList = await Promise.all(
     missingList.map((missingFile) =>

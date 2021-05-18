@@ -6,7 +6,7 @@
           <img src="./assets/profile_akari_square.png" />
         </v-avatar>
 
-        <b><font color="#ffffff">AkariSync</font></b>
+        <h2><font color="#ffffff">AkariSync</font></h2>
         <v-spacer />
         <v-tooltip v-if="!$vuetify.theme.dark" bottom>
           <template v-slot:activator="{ on }">
@@ -25,6 +25,12 @@
           </template>
           <span>Dark Mode Off</span>
         </v-tooltip>
+        <v-btn class="white--text ms-5" outlined @click="clickNewEntry()">
+          Add new Entry
+          <v-icon right dark>
+            mdi-plus-box-outline
+          </v-icon>
+        </v-btn>
       </v-container>
     </v-app-bar>
     <v-main :class="mainClass">
@@ -32,13 +38,19 @@
         <router-view />
       </v-container>
     </v-main>
+    <sync-data-detail-view ref="syncDetailView" />
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import SyncDataDetailView from "@/component/SyncDataDetailView.vue";
 
-@Component({})
+@Component({
+  components: {
+    SyncDataDetailView
+  }
+})
 export default class App extends Vue {
   $vuetify: any;
 
@@ -57,6 +69,11 @@ export default class App extends Vue {
   darkMode() {
     this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     window.localStorage.darkMode = this.$vuetify.theme.dark.toString();
+  }
+
+  clickNewEntry() {
+    const detailView = this.$refs.syncDetailView as SyncDataDetailView;
+    detailView.openDialog(null);
   }
 }
 </script>

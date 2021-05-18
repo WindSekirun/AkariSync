@@ -6,6 +6,7 @@ export type SyncDataDocument = SyncData & Document;
 
 @Schema()
 export class SyncData implements SyncDataDto {
+  _id: string;
   @Prop({ required: true })
   name: string;
   @Prop({ required: true })

@@ -12,5 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "esModuleInterop": true
-  }
+  },
+  "declaration": true,
+  "type": "module"
 }

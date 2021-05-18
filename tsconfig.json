@@ -9,7 +9,10 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@akari-sync/*": ["./*/src"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }
