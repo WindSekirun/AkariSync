@@ -43,17 +43,11 @@ export default async function (job: Job, cb: DoneCallback) {
 
   console.log("Missing List", missingList);
 
-  const downloadedList = await Promise.all(
-    missingList.map((missingFile) =>
-      youtubeDLExecutor.downloadFile(platform, extension, missingFile, tempPath)
-    )
-  );
-
-  await Promise.all(
-    downloadedList.map((element) => webDavClient.writeFile(element, syncData.syncDirectory))
-  );
-
-  downloadedList.forEach((element) => fs.unlinkSync(element));
+  for (const element of missingList) {
+    const file = await youtubeDLExecutor.downloadFile(platform, extension, element, tempPath);
+    await webDavClient.writeFile(file, syncData.syncDirectory);
+    fs.unlinkSync(file);
+  }
 
   await telegramNotifyExecutor.sendMessage(`Sync completed in ${syncData.name}`);
   cb();

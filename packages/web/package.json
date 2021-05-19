@@ -1,7 +1,6 @@
 {
   "name": "@akari-sync/web",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "prebuild": "rimraf ../../dist/web",
     "serve": "vue-cli-service serve --mode local",

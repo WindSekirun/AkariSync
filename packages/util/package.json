@@ -4,9 +4,9 @@
   "description": "",
   "author": "",
   "license": "MIT",
-  "private": true,
   "main": "index.ts",
   "dependencies": {
+    "@akari-sync/dto": "^0.0.1",
     "dotenv": "9.0.2",
     "find-config": "1.0.0",
     "webdav": "4.5.0"

@@ -3,6 +3,7 @@ import { VideoObject } from "../model/videoobject";
 import fs from "fs";
 import { Extension } from "../extension/extension";
 import { Platform } from "src/platform/platform";
+import sanitize from "sanitize-filename";
 
 const exec = require("child_process").execSync;
 
@@ -32,7 +33,7 @@ export class YoutubeDLExecutor {
 
     exec(command, { stdio: "inherit" });
 
-    const files = fs.readdirSync(tempPath).filter((fn) => fn.startsWith(videoTitle));
+    const files = fs.readdirSync(tempPath);
     return join(tempPath, files[0]);
   }
 

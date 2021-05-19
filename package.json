@@ -4,8 +4,7 @@
   "license": "MIT",
   "workspaces": {
     "packages": [
-      "packages/*",
-      "libs/*"
+      "packages/*"
     ],
     "nohoist": [
       "**/@vue/cli-service"
