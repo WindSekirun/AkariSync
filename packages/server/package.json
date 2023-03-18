@@ -30,7 +30,7 @@
     "bull": "3.22.10",
     "dotenv": "10.0.0",
     "find-config": "1.0.0",
-    "mongoose": "5.13.2",
+    "mongoose": "5.13.15",
     "reflect-metadata": "0.1.13",
     "rss-parser": "3.12.0",
     "rxjs": "6.6.7",
